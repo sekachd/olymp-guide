@@ -26,10 +26,8 @@
             background: #f2f2f7;
             border-radius: 40px;
             padding: 20px 16px 30px;
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
         }
 
-        /* iOS-стиль */
         .header {
             padding: 10px 0 18px;
         }
@@ -45,7 +43,6 @@
             margin-top: 4px;
         }
 
-        /* Поиск */
         .search-box {
             background: #ffffff;
             border-radius: 14px;
@@ -85,7 +82,6 @@
             transform: scale(0.96);
         }
 
-        /* Фильтры (предметы) */
         .filters {
             display: flex;
             gap: 8px;
@@ -111,7 +107,6 @@
             opacity: 0.6;
         }
 
-        /* Карточки */
         .results {
             display: flex;
             flex-direction: column;
@@ -124,7 +119,6 @@
             border-radius: 16px;
             padding: 16px 18px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            transition: 0.1s;
         }
         .card h3 {
             font-size: 18px;
@@ -161,6 +155,31 @@
             margin: 3px 4px 3px 0;
             font-size: 13px;
         }
+        .card .benefits {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .benefit-tag {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .benefit-bvi {
+            background: #34c759;
+            color: white;
+        }
+        .benefit-100 {
+            background: #007aff;
+            color: white;
+        }
+        .benefit-extra {
+            background: #ff9500;
+            color: white;
+        }
         .card .prep-link {
             margin-top: 10px;
             font-size: 14px;
@@ -182,7 +201,6 @@
             font-size: 16px;
         }
 
-        /* Tabbar (подготовка) */
         .tabbar {
             margin-top: 28px;
             display: flex;
@@ -256,13 +274,11 @@
         <p>Найди олимпиаду для вуза</p>
     </div>
 
-    <!-- Поиск -->
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="Вуз, например МГУ" autocomplete="off">
         <button id="searchBtn">Найти</button>
     </div>
 
-    <!-- Фильтры по предметам -->
     <div class="filters" id="filterContainer">
         <button class="filter-btn active" data-subject="all">Все</button>
         <button class="filter-btn" data-subject="математика">📐 Математика</button>
@@ -270,16 +286,13 @@
         <button class="filter-btn" data-subject="информатика">💻 Информатика</button>
     </div>
 
-    <!-- Результаты -->
     <div class="results" id="resultsContainer"></div>
 
-    <!-- Tabbar -->
     <div class="tabbar">
         <button class="active" data-tab="olymp">Олимпиады</button>
         <button data-tab="prep">📚 Подготовка</button>
     </div>
 
-    <!-- Раздел подготовки -->
     <div class="prep-section" id="prepSection">
         <h4>📹 Полезные материалы</h4>
         <div id="prepContent">
@@ -289,24 +302,20 @@
         </div>
     </div>
 
-    <div class="footnote">Данные для примера. Добавь свои олимпиады в коде.</div>
+    <div class="footnote">Данные обновлены: 13 вузов, типы льгот (БВИ / 100 баллов / доп. баллы)</div>
 </div>
 
 <script>
-    // ------------------------------------------------------------
-    //  БАЗА ДАННЫХ (редактируй здесь)
-    // ------------------------------------------------------------
     const olympiads = [
+        // ===== МГУ =====
         {
             name: "Ломоносов",
             level: "Перечневая I уровня",
             university: "МГУ",
             subjects: ["математика", "физика"],
             directions: ["Мехмат", "ВМК", "Физфак"],
-            prepLinks: [
-                "https://olympiada.ru/msu/lomonosov",
-                "https://www.youtube.com/results?search_query=ломоносов+олимпиада"
-            ]
+            benefits: ["БВИ", "100 баллов"],
+            prepLinks: ["https://olympiada.ru/msu/lomonosov"]
         },
         {
             name: "Покори Воробьёвы горы",
@@ -314,88 +323,199 @@
             university: "МГУ",
             subjects: ["математика"],
             directions: ["Мехмат", "ВМК"],
-            prepLinks: [
-                "https://olimpiada.ru/msu/vorobyovy-gory",
-                "https://www.youtube.com/results?search_query=покори+воробьевы+горы"
-            ]
+            benefits: ["БВИ"],
+            prepLinks: ["https://olimpiada.ru/msu/vorobyovy-gory"]
         },
-        {
-            name: "ВсОШ (математика)",
-            level: "Всероссийская",
-            university: "МГУ, СПбГУ, МФТИ, НИУ ВШЭ",
-            subjects: ["математика"],
-            directions: ["Математика", "Физика", "ИТ", "Экономика"],
-            prepLinks: [
-                "https://vserosolymp.ru/",
-                "https://www.youtube.com/results?search_query=всош+математика"
-            ]
-        },
+        // ===== МФТИ =====
         {
             name: "Физтех",
             level: "Перечневая I уровня",
             university: "МФТИ",
             subjects: ["физика", "математика"],
             directions: ["ФПМИ", "ФРКТ", "Физтех-школа физики"],
-            prepLinks: [
-                "https://olympiada.mipt.ru/",
-                "https://www.youtube.com/results?search_query=олимпиада+физтех"
-            ]
+            benefits: ["БВИ", "100 баллов"],
+            prepLinks: ["https://olympiada.mipt.ru/"]
         },
         {
             name: "Росатом",
             level: "Перечневая I уровня",
-            university: "СПбГУ, МФТИ",
+            university: "МФТИ, НИЯУ МИФИ, СПбГУ",
             subjects: ["физика", "математика"],
             directions: ["Физика", "Ядерная физика", "Физтех-школа физики"],
-            prepLinks: [
-                "https://rosatom-olymp.ru/",
-                "https://www.youtube.com/results?search_query=росатом+олимпиада"
-            ]
+            benefits: ["БВИ", "100 баллов"],
+            prepLinks: ["https://rosatom-olymp.ru/"]
         },
+        // ===== НИУ ВШЭ =====
         {
             name: "Высшая проба",
             level: "Перечневая I уровня",
             university: "НИУ ВШЭ",
             subjects: ["математика", "информатика", "экономика"],
             directions: ["Экономика", "Математика", "ИТ"],
-            prepLinks: [
-                "https://olymp.hse.ru/proba/",
-                "https://www.youtube.com/results?search_query=высшая+проба"
-            ]
+            benefits: ["БВИ", "100 баллов"],
+            prepLinks: ["https://olymp.hse.ru/proba/"]
+        },
+        // ===== МГТУ им. Баумана =====
+        {
+            name: "Шаг в будущее",
+            level: "Перечневая II уровня",
+            university: "МГТУ им. Баумана",
+            subjects: ["математика", "физика"],
+            directions: ["Инженерия", "Робототехника", "Физика"],
+            benefits: ["100 баллов", "доп. баллы"],
+            prepLinks: ["https://stepfuture.ru/"]
+        },
+        // ===== СПбГУ =====
+        {
+            name: "Ломоносов",
+            level: "Перечневая I уровня",
+            university: "СПбГУ",
+            subjects: ["математика", "физика"],
+            directions: ["Математика", "Физика"],
+            benefits: ["БВИ"],
+            prepLinks: ["https://olympiada.ru/msu/lomonosov"]
+        },
+        // ===== НИЯУ МИФИ =====
+        {
+            name: "Росатом",
+            level: "Перечневая I уровня",
+            university: "НИЯУ МИФИ",
+            subjects: ["физика", "математика"],
+            directions: ["Ядерная физика", "Физика"],
+            benefits: ["БВИ"],
+            prepLinks: ["https://rosatom-olymp.ru/"]
         },
         {
-            name: "ММО (Международная)",
+            name: "Инженерная олимпиада НИЯУ МИФИ",
+            level: "Перечневая II уровня",
+            university: "НИЯУ МИФИ",
+            subjects: ["физика", "математика"],
+            directions: ["Инженерия", "Физика"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://mephi.ru/"]
+        },
+        // ===== УрФУ =====
+        {
+            name: "Уральский турнир юных физиков",
+            level: "Перечневая III уровня",
+            university: "УрФУ",
+            subjects: ["физика"],
+            directions: ["Физика", "Инженерия"],
+            benefits: ["доп. баллы"],
+            prepLinks: ["https://urfu.ru/"]
+        },
+        // ===== ТПУ =====
+        {
+            name: "Политехническая олимпиада ТПУ",
+            level: "Перечневая II уровня",
+            university: "ТПУ",
+            subjects: ["физика", "математика"],
+            directions: ["Инженерия", "Физика"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://tpu.ru/"]
+        },
+        // ===== ИТМО =====
+        {
+            name: "ИТМО-олимпиада по информатике",
+            level: "Перечневая I уровня",
+            university: "ИТМО",
+            subjects: ["информатика", "математика"],
+            directions: ["ИТ", "Робототехника", "Оптика"],
+            benefits: ["БВИ", "100 баллов"],
+            prepLinks: ["https://itmo.ru/"]
+        },
+        // ===== НГУ =====
+        {
+            name: "Всесибирская олимпиада",
+            level: "Перечневая I уровня",
+            university: "НГУ",
+            subjects: ["математика", "физика"],
+            directions: ["Математика", "Физика"],
+            benefits: ["БВИ"],
+            prepLinks: ["https://olimpiada.nsu.ru/"]
+        },
+        // ===== МАИ =====
+        {
+            name: "Космическая олимпиада МАИ",
+            level: "Перечневая II уровня",
+            university: "МАИ",
+            subjects: ["физика", "математика"],
+            directions: ["Авиация", "Космонавтика"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://mai.ru/"]
+        },
+        // ===== МИСиС =====
+        {
+            name: "МИСиС-олимпиада по материаловедению",
+            level: "Перечневая II уровня",
+            university: "НИТУ МИСиС",
+            subjects: ["математика", "физика"],
+            directions: ["Материаловедение", "Металлургия", "ИТ"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://misis.ru/"]
+        },
+        // ===== РУДН =====
+        {
+            name: "Олимпиада РУДН по иностранным языкам",
+            level: "Перечневая III уровня",
+            university: "РУДН",
+            subjects: ["математика"],
+            directions: ["Международные отношения", "Лингвистика"],
+            benefits: ["доп. баллы"],
+            prepLinks: ["https://rudn.ru/"]
+        },
+        // ===== Общие олимпиады (несколько вузов) =====
+        {
+            name: "ВсОШ (математика)",
+            level: "Всероссийская",
+            university: "МГУ, МФТИ, НИУ ВШЭ, СПбГУ, НГУ, УрФУ",
+            subjects: ["математика"],
+            directions: ["Математика", "Физика", "ИТ", "Экономика"],
+            benefits: ["БВИ", "100 баллов"],
+            prepLinks: ["https://vserosolymp.ru/"]
+        },
+        {
+            name: "ВсОШ (физика)",
+            level: "Всероссийская",
+            university: "МФТИ, МГУ, НИЯУ МИФИ, ИТМО, НГУ",
+            subjects: ["физика"],
+            directions: ["Физика", "Инженерия", "ИТ"],
+            benefits: ["БВИ", "100 баллов"],
+            prepLinks: ["https://vserosolymp.ru/"]
+        },
+        {
+            name: "ВсОШ (информатика)",
+            level: "Всероссийская",
+            university: "НИУ ВШЭ, ИТМО, МФТИ, СПбГУ",
+            subjects: ["информатика"],
+            directions: ["ИТ", "Математика", "Робототехника"],
+            benefits: ["БВИ", "100 баллов"],
+            prepLinks: ["https://vserosolymp.ru/"]
+        },
+        {
+            name: "ММО (Международная математическая)",
             level: "Международная",
-            university: "МГУ, СПбГУ, МФТИ",
+            university: "МГУ, СПбГУ, МФТИ, НГУ",
             subjects: ["математика"],
             directions: ["Математика", "Мехмат", "Физтех-школы"],
-            prepLinks: [
-                "https://imo-official.org/",
-                "https://www.youtube.com/results?search_query=mmo+олимпиада"
-            ]
+            benefits: ["БВИ"],
+            prepLinks: ["https://imo-official.org/"]
         }
     ];
 
-    // ------------------------------------------------------------
-    //  ЛОГИКА
-    // ------------------------------------------------------------
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
     const resultsContainer = document.getElementById('resultsContainer');
     const filterBtns = document.querySelectorAll('.filter-btn');
     const tabButtons = document.querySelectorAll('.tabbar button');
     const prepSection = document.getElementById('prepSection');
-    const prepContent = document.getElementById('prepContent');
 
     let currentFilter = 'all';
-    let currentTab = 'olymp';
 
     function renderResults(filterSubject = 'all', query = '') {
         const q = query.toLowerCase().trim();
         let filtered = olympiads.filter(ol => {
-            // поиск по вузу
             const uniMatch = ol.university.toLowerCase().includes(q) || q === '';
-            // фильтр по предмету
             const subjectMatch = filterSubject === 'all' || ol.subjects.includes(filterSubject);
             return uniMatch && subjectMatch;
         });
@@ -408,6 +528,16 @@
         let html = '';
         filtered.forEach(ol => {
             const dirs = ol.directions.map(d => `<span>${d}</span>`).join(' ');
+            let benefitsHtml = '';
+            if (ol.benefits && ol.benefits.length > 0) {
+                ol.benefits.forEach(b => {
+                    let cls = '';
+                    if (b === 'БВИ') cls = 'benefit-bvi';
+                    else if (b === '100 баллов') cls = 'benefit-100';
+                    else if (b === 'доп. баллы') cls = 'benefit-extra';
+                    benefitsHtml += `<span class="benefit-tag ${cls}">${b}</span>`;
+                });
+            }
             const prepLinksHtml = ol.prepLinks && ol.prepLinks.length > 0
                 ? ol.prepLinks.map(link => `<a href="${link}" target="_blank" class="prep-link">🔗 Материалы</a>`).join(' ')
                 : '';
@@ -418,6 +548,7 @@
                     <div class="level">${ol.level}</div>
                     <div class="uni">🏛 ${ol.university}</div>
                     <div class="directions">Направления: ${dirs}</div>
+                    ${benefitsHtml ? `<div class="benefits">${benefitsHtml}</div>` : ''}
                     ${prepLinksHtml}
                 </div>
             `;
@@ -430,13 +561,11 @@
         renderResults(currentFilter, query);
     }
 
-    // События
     searchBtn.addEventListener('click', handleSearch);
     searchInput.addEventListener('keyup', (e) => {
         if (e.key === 'Enter') handleSearch();
     });
 
-    // Фильтры
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
@@ -446,13 +575,11 @@
         });
     });
 
-    // Tabbar
     tabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             tabButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            currentTab = btn.dataset.tab;
-            if (currentTab === 'prep') {
+            if (btn.dataset.tab === 'prep') {
                 prepSection.classList.add('show');
             } else {
                 prepSection.classList.remove('show');
@@ -460,7 +587,6 @@
         });
     });
 
-    // Стартовый рендер
     renderResults('all', '');
 </script>
 </body>
