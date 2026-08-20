@@ -247,7 +247,7 @@
             display: block;
             color: #007aff;
             text-decoration: none;
-            padding: 6px 0;
+            padding: 8px 0;
             font-size: 15px;
             border-bottom: 1px solid #f2f2f7;
         }
@@ -294,15 +294,18 @@
     </div>
 
     <div class="prep-section" id="prepSection">
-        <h4>📹 Полезные материалы</h4>
+        <h4>📹 Полезные материалы для подготовки</h4>
         <div id="prepContent">
-            <a href="https://olimpiada.ru/" target="_blank">Olimpiada.ru — всё об олимпиадах</a>
-            <a href="https://www.youtube.com/@matholymp" target="_blank">YouTube: Разборы олимпиадных задач</a>
-            <a href="https://stepik.org/course/12345" target="_blank">Stepik: Подготовка к ВсОШ</a>
+            <a href="https://olimpiada.ru/" target="_blank">Olimpiada.ru — главный портал олимпиад</a>
+            <a href="https://rsr-olymp.ru/" target="_blank">РСОШ — официальный список перечневых олимпиад</a>
+            <a href="https://edu.sirius.online/" target="_blank">Сириус.Курсы — бесплатная подготовка</a>
+            <a href="https://stepik.org/catalog/42" target="_blank">Stepik — курсы по олимпиадной математике</a>
+            <a href="https://www.youtube.com/c/MathOlympiadsRu" target="_blank">YouTube — разборы олимпиадных задач</a>
+            <a href="https://olimpiada.nsu.ru/" target="_blank">Всесибирская олимпиада — архив задач</a>
         </div>
     </div>
 
-    <div class="footnote">Данные обновлены: 13 вузов, типы льгот (БВИ / 100 баллов / доп. баллы)</div>
+    <div class="footnote">26 вузов, типы льгот: БВИ / 100 баллов / доп. баллы</div>
 </div>
 
 <script>
@@ -315,7 +318,7 @@
             subjects: ["математика", "физика"],
             directions: ["Мехмат", "ВМК", "Физфак"],
             benefits: ["БВИ", "100 баллов"],
-            prepLinks: ["https://olympiada.ru/msu/lomonosov"]
+            prepLinks: ["https://olimpiada.ru/msu/lomonosov"]
         },
         {
             name: "Покори Воробьёвы горы",
@@ -341,7 +344,7 @@
             level: "Перечневая I уровня",
             university: "МФТИ, НИЯУ МИФИ, СПбГУ",
             subjects: ["физика", "математика"],
-            directions: ["Физика", "Ядерная физика", "Физтех-школа физики"],
+            directions: ["Физика", "Ядерная физика"],
             benefits: ["БВИ", "100 баллов"],
             prepLinks: ["https://rosatom-olymp.ru/"]
         },
@@ -361,7 +364,7 @@
             level: "Перечневая II уровня",
             university: "МГТУ им. Баумана",
             subjects: ["математика", "физика"],
-            directions: ["Инженерия", "Робототехника", "Физика"],
+            directions: ["Инженерия", "Робототехника"],
             benefits: ["100 баллов", "доп. баллы"],
             prepLinks: ["https://stepfuture.ru/"]
         },
@@ -373,7 +376,7 @@
             subjects: ["математика", "физика"],
             directions: ["Математика", "Физика"],
             benefits: ["БВИ"],
-            prepLinks: ["https://olympiada.ru/msu/lomonosov"]
+            prepLinks: ["https://olimpiada.ru/msu/lomonosov"]
         },
         // ===== НИЯУ МИФИ =====
         {
@@ -456,7 +459,7 @@
         },
         // ===== РУДН =====
         {
-            name: "Олимпиада РУДН по иностранным языкам",
+            name: "Олимпиада РУДН",
             level: "Перечневая III уровня",
             university: "РУДН",
             subjects: ["математика"],
@@ -464,11 +467,141 @@
             benefits: ["доп. баллы"],
             prepLinks: ["https://rudn.ru/"]
         },
-        // ===== Общие олимпиады (несколько вузов) =====
+        // ===== СПбГУ ГА =====
+        {
+            name: "Олимпиада по физике для авиации",
+            level: "Перечневая III уровня",
+            university: "СПбГУ ГА",
+            subjects: ["физика", "математика"],
+            directions: ["Лётная эксплуатация", "Авиадиспетчеры", "Инженерия"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://olimpiada.ru/"]
+        },
+        // ===== УИ ГА =====
+        {
+            name: "Олимпиада УИ ГА по математике",
+            level: "Перечневая III уровня",
+            university: "УИ ГА",
+            subjects: ["математика"],
+            directions: ["Лётная эксплуатация", "Авиадиспетчеры"],
+            benefits: ["доп. баллы"],
+            prepLinks: ["https://olimpiada.ru/"]
+        },
+        // ===== КФУ =====
+        {
+            name: "Олимпиада КФУ по математике",
+            level: "Перечневая II уровня",
+            university: "КФУ",
+            subjects: ["математика", "физика"],
+            directions: ["Математика", "Физика", "ИТ"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://kpfu.ru/"]
+        },
+        // ===== КГАУ =====
+        {
+            name: "Олимпиада КГАУ по физике",
+            level: "Перечневая III уровня",
+            university: "КГАУ",
+            subjects: ["физика"],
+            directions: ["Агроинженерия", "Экология"],
+            benefits: ["доп. баллы"],
+            prepLinks: ["https://kgau.ru/"]
+        },
+        // ===== КАИ =====
+        {
+            name: "Олимпиада КАИ по математике",
+            level: "Перечневая II уровня",
+            university: "КАИ",
+            subjects: ["математика", "физика"],
+            directions: ["Авиастроение", "Робототехника", "ИТ"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://kai.ru/"]
+        },
+        // ===== СФУ =====
+        {
+            name: "Олимпиада СФУ по математике",
+            level: "Перечневая II уровня",
+            university: "СФУ",
+            subjects: ["математика", "физика"],
+            directions: ["Математика", "Физика", "Инженерия"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://sfu-kras.ru/"]
+        },
+        // ===== ДВФУ =====
+        {
+            name: "Олимпиада ДВФУ по физике",
+            level: "Перечневая II уровня",
+            university: "ДВФУ",
+            subjects: ["физика", "математика"],
+            directions: ["Физика", "Инженерия", "Морская техника"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://dvfu.ru/"]
+        },
+        // ===== ЮФУ =====
+        {
+            name: "Олимпиада ЮФУ по информатике",
+            level: "Перечневая II уровня",
+            university: "ЮФУ",
+            subjects: ["информатика", "математика"],
+            directions: ["ИТ", "Робототехника"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://sfedu.ru/"]
+        },
+        // ===== БФУ =====
+        {
+            name: "Олимпиада БФУ по математике",
+            level: "Перечневая III уровня",
+            university: "БФУ им. Канта",
+            subjects: ["математика"],
+            directions: ["Математика", "Философия"],
+            benefits: ["доп. баллы"],
+            prepLinks: ["https://kantiana.ru/"]
+        },
+        // ===== СевГУ =====
+        {
+            name: "Олимпиада СевГУ по физике",
+            level: "Перечневая III уровня",
+            university: "СевГУ",
+            subjects: ["физика"],
+            directions: ["Инженерия", "Морская техника"],
+            benefits: ["доп. баллы"],
+            prepLinks: ["https://sevsu.ru/"]
+        },
+        // ===== ПГНИУ =====
+        {
+            name: "Олимпиада ПГНИУ по математике",
+            level: "Перечневая II уровня",
+            university: "ПГНИУ",
+            subjects: ["математика"],
+            directions: ["Математика", "Физика"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://psu.ru/"]
+        },
+        // ===== ННГУ =====
+        {
+            name: "Олимпиада ННГУ по физике",
+            level: "Перечневая II уровня",
+            university: "ННГУ им. Лобачевского",
+            subjects: ["физика", "математика"],
+            directions: ["Физика", "Математика", "ИТ"],
+            benefits: ["100 баллов"],
+            prepLinks: ["https://unn.ru/"]
+        },
+        // ===== ОмГУ =====
+        {
+            name: "Олимпиада ОмГУ по математике",
+            level: "Перечневая III уровня",
+            university: "ОмГУ",
+            subjects: ["математика"],
+            directions: ["Математика", "Физика"],
+            benefits: ["доп. баллы"],
+            prepLinks: ["https://omsu.ru/"]
+        },
+        // ===== Общие олимпиады (для всех) =====
         {
             name: "ВсОШ (математика)",
             level: "Всероссийская",
-            university: "МГУ, МФТИ, НИУ ВШЭ, СПбГУ, НГУ, УрФУ",
+            university: "МГУ, МФТИ, НИУ ВШЭ, СПбГУ, ИТМО, НГУ, КФУ, УрФУ, СФУ, ДВФУ, ЮФУ",
             subjects: ["математика"],
             directions: ["Математика", "Физика", "ИТ", "Экономика"],
             benefits: ["БВИ", "100 баллов"],
@@ -477,7 +610,7 @@
         {
             name: "ВсОШ (физика)",
             level: "Всероссийская",
-            university: "МФТИ, МГУ, НИЯУ МИФИ, ИТМО, НГУ",
+            university: "МФТИ, МГУ, НИЯУ МИФИ, ИТМО, НГУ, КФУ, СФУ, ДВФУ",
             subjects: ["физика"],
             directions: ["Физика", "Инженерия", "ИТ"],
             benefits: ["БВИ", "100 баллов"],
@@ -486,7 +619,7 @@
         {
             name: "ВсОШ (информатика)",
             level: "Всероссийская",
-            university: "НИУ ВШЭ, ИТМО, МФТИ, СПбГУ",
+            university: "НИУ ВШЭ, ИТМО, МФТИ, СПбГУ, КАИ, ЮФУ, ННГУ",
             subjects: ["информатика"],
             directions: ["ИТ", "Математика", "Робототехника"],
             benefits: ["БВИ", "100 баллов"],
