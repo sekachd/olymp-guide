@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Олимпиадный навигатор</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f2f2f7;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px 12px 30px;
+        }
+
+        .app {
+            max-width: 430px;
+            width: 100%;
+            background: #f2f2f7;
+            border-radius: 40px;
+            padding: 20px 16px 30px;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
+        }
+
+        /* iOS-стиль */
+        .header {
+            padding: 10px 0 18px;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #000;
+            letter-spacing: -0.5px;
+        }
+        .header p {
+            color: #8e8e93;
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        /* Поиск */
+        .search-box {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            margin-bottom: 16px;
+        }
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 17px;
+            padding: 12px 0;
+            flex: 1;
+            background: transparent;
+        }
+        .search-box input::placeholder {
+            color: #aeaeb2;
+            font-weight: 400;
+        }
+        .search-box button {
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 22px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+        }
+        .search-box button:active {
+            opacity: 0.7;
+            transform: scale(0.96);
+        }
+
+        /* Фильтры (предметы) */
+        .filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .filter-btn {
+            background: #e5e5ea;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1c1c1e;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .filter-btn.active {
+            background: #007aff;
+            color: white;
+        }
+        .filter-btn:active {
+            opacity: 0.6;
+        }
+
+        /* Карточки */
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: 0.1s;
+        }
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 4px;
+        }
+        .card .level {
+            font-size: 13px;
+            font-weight: 500;
+            color: #007aff;
+            background: #e9f2ff;
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 30px;
+            margin-bottom: 8px;
+        }
+        .card .uni {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1c1c1e;
+            margin-bottom: 2px;
+        }
+        .card .directions {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-top: 6px;
+        }
+        .card .directions span {
+            background: #f2f2f7;
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 3px 4px 3px 0;
+            font-size: 13px;
+        }
+        .card .prep-link {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #007aff;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .card .prep-link:active {
+            opacity: 0.6;
+        }
+
+        .empty {
+            text-align: center;
+            color: #8e8e93;
+            padding: 40px 0;
+            font-size: 16px;
+        }
+
+        /* Tabbar (подготовка) */
+        .tabbar {
+            margin-top: 28px;
+            display: flex;
+            gap: 6px;
+            background: #e5e5ea;
+            border-radius: 30px;
+            padding: 4px;
+        }
+        .tabbar button {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 0;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1c1c1e;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tabbar button.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .tabbar button:active {
+            opacity: 0.6;
+        }
+
+        .prep-section {
+            margin-top: 18px;
+            background: white;
+            border-radius: 16px;
+            padding: 18px;
+            display: none;
+        }
+        .prep-section.show {
+            display: block;
+        }
+        .prep-section h4 {
+            font-size: 17px;
+            margin-bottom: 12px;
+        }
+        .prep-section a {
+            display: block;
+            color: #007aff;
+            text-decoration: none;
+            padding: 6px 0;
+            font-size: 15px;
+            border-bottom: 1px solid #f2f2f7;
+        }
+        .prep-section a:last-child {
+            border-bottom: none;
+        }
+        .prep-section a:active {
+            opacity: 0.6;
+        }
+
+        .footnote {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #aeaeb2;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+
+    <div class="header">
+        <h1>🎯 Олимп-гид</h1>
+        <p>Найди олимпиаду для вуза</p>
+    </div>
+
+    <!-- Поиск -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Вуз, например МГУ" autocomplete="off">
+        <button id="searchBtn">Найти</button>
+    </div>
+
+    <!-- Фильтры по предметам -->
+    <div class="filters" id="filterContainer">
+        <button class="filter-btn active" data-subject="all">Все</button>
+        <button class="filter-btn" data-subject="математика">📐 Математика</button>
+        <button class="filter-btn" data-subject="физика">⚛ Физика</button>
+        <button class="filter-btn" data-subject="информатика">💻 Информатика</button>
+    </div>
+
+    <!-- Результаты -->
+    <div class="results" id="resultsContainer"></div>
+
+    <!-- Tabbar -->
+    <div class="tabbar">
+        <button class="active" data-tab="olymp">Олимпиады</button>
+        <button data-tab="prep">📚 Подготовка</button>
+    </div>
+
+    <!-- Раздел подготовки -->
+    <div class="prep-section" id="prepSection">
+        <h4>📹 Полезные материалы</h4>
+        <div id="prepContent">
+            <a href="https://olimpiada.ru/" target="_blank">Olimpiada.ru — всё об олимпиадах</a>
+            <a href="https://www.youtube.com/@matholymp" target="_blank">YouTube: Разборы олимпиадных задач</a>
+            <a href="https://stepik.org/course/12345" target="_blank">Stepik: Подготовка к ВсОШ</a>
+        </div>
+    </div>
+
+    <div class="footnote">Данные для примера. Добавь свои олимпиады в коде.</div>
+</div>
+
+<script>
+    // ------------------------------------------------------------
+    //  БАЗА ДАННЫХ (редактируй здесь)
+    // ------------------------------------------------------------
+    const olympiads = [
+        {
+            name: "Ломоносов",
+            level: "Перечневая I уровня",
+            university: "МГУ",
+            subjects: ["математика", "физика"],
+            directions: ["Мехмат", "ВМК", "Физфак"],
+            prepLinks: [
+                "https://olympiada.ru/msu/lomonosov",
+                "https://www.youtube.com/results?search_query=ломоносов+олимпиада"
+            ]
+        },
+        {
+            name: "Покори Воробьёвы горы",
+            level: "Перечневая I уровня",
+            university: "МГУ",
+            subjects: ["математика"],
+            directions: ["Мехмат", "ВМК"],
+            prepLinks: [
+                "https://olimpiada.ru/msu/vorobyovy-gory",
+                "https://www.youtube.com/results?search_query=покори+воробьевы+горы"
+            ]
+        },
+        {
+            name: "ВсОШ (математика)",
+            level: "Всероссийская",
+            university: "МГУ, СПбГУ, МФТИ, НИУ ВШЭ",
+            subjects: ["математика"],
+            directions: ["Математика", "Физика", "ИТ", "Экономика"],
+            prepLinks: [
+                "https://vserosolymp.ru/",
+                "https://www.youtube.com/results?search_query=всош+математика"
+            ]
+        },
+        {
+            name: "Физтех",
+            level: "Перечневая I уровня",
+            university: "МФТИ",
+            subjects: ["физика", "математика"],
+            directions: ["ФПМИ", "ФРКТ", "Физтех-школа физики"],
+            prepLinks: [
+                "https://olympiada.mipt.ru/",
+                "https://www.youtube.com/results?search_query=олимпиада+физтех"
+            ]
+        },
+        {
+            name: "Росатом",
+            level: "Перечневая I уровня",
+            university: "СПбГУ, МФТИ",
+            subjects: ["физика", "математика"],
+            directions: ["Физика", "Ядерная физика", "Физтех-школа физики"],
+            prepLinks: [
+                "https://rosatom-olymp.ru/",
+                "https://www.youtube.com/results?search_query=росатом+олимпиада"
+            ]
+        },
+        {
+            name: "Высшая проба",
+            level: "Перечневая I уровня",
+            university: "НИУ ВШЭ",
+            subjects: ["математика", "информатика", "экономика"],
+            directions: ["Экономика", "Математика", "ИТ"],
+            prepLinks: [
+                "https://olymp.hse.ru/proba/",
+                "https://www.youtube.com/results?search_query=высшая+проба"
+            ]
+        },
+        {
+            name: "ММО (Международная)",
+            level: "Международная",
+            university: "МГУ, СПбГУ, МФТИ",
+            subjects: ["математика"],
+            directions: ["Математика", "Мехмат", "Физтех-школы"],
+            prepLinks: [
+                "https://imo-official.org/",
+                "https://www.youtube.com/results?search_query=mmo+олимпиада"
+            ]
+        }
+    ];
+
+    // ------------------------------------------------------------
+    //  ЛОГИКА
+    // ------------------------------------------------------------
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const tabButtons = document.querySelectorAll('.tabbar button');
+    const prepSection = document.getElementById('prepSection');
+    const prepContent = document.getElementById('prepContent');
+
+    let currentFilter = 'all';
+    let currentTab = 'olymp';
+
+    function renderResults(filterSubject = 'all', query = '') {
+        const q = query.toLowerCase().trim();
+        let filtered = olympiads.filter(ol => {
+            // поиск по вузу
+            const uniMatch = ol.university.toLowerCase().includes(q) || q === '';
+            // фильтр по предмету
+            const subjectMatch = filterSubject === 'all' || ol.subjects.includes(filterSubject);
+            return uniMatch && subjectMatch;
+        });
+
+        if (filtered.length === 0) {
+            resultsContainer.innerHTML = `<div class="empty">😕 Ничего не найдено<br><span style="font-size:14px;">Попробуй другой вуз или фильтр</span></div>`;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(ol => {
+            const dirs = ol.directions.map(d => `<span>${d}</span>`).join(' ');
+            const prepLinksHtml = ol.prepLinks && ol.prepLinks.length > 0
+                ? ol.prepLinks.map(link => `<a href="${link}" target="_blank" class="prep-link">🔗 Материалы</a>`).join(' ')
+                : '';
+
+            html += `
+                <div class="card">
+                    <h3>${ol.name}</h3>
+                    <div class="level">${ol.level}</div>
+                    <div class="uni">🏛 ${ol.university}</div>
+                    <div class="directions">Направления: ${dirs}</div>
+                    ${prepLinksHtml}
+                </div>
+            `;
+        });
+        resultsContainer.innerHTML = html;
+    }
+
+    function handleSearch() {
+        const query = searchInput.value;
+        renderResults(currentFilter, query);
+    }
+
+    // События
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') handleSearch();
+    });
+
+    // Фильтры
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.subject;
+            handleSearch();
+        });
+    });
+
+    // Tabbar
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentTab = btn.dataset.tab;
+            if (currentTab === 'prep') {
+                prepSection.classList.add('show');
+            } else {
+                prepSection.classList.remove('show');
+            }
+        });
+    });
+
+    // Стартовый рендер
+    renderResults('all', '');
+</script>
+</body>
+</html>
