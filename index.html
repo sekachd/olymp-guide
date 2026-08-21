@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Олимпиадный навигатор</title>
+    <title>Олимп-гид 2.0</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
         }
-
         body {
             background: #f2f2f7;
             display: flex;
@@ -19,7 +19,10 @@
             min-height: 100vh;
             padding: 20px 12px 30px;
         }
-
+        body.dark {
+            background: #000;
+            color: #f2f2f7;
+        }
         .app {
             max-width: 430px;
             width: 100%;
@@ -27,8 +30,13 @@
             border-radius: 40px;
             padding: 20px 16px 30px;
         }
-
+        body.dark .app {
+            background: #1c1c1e;
+        }
         .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 10px 0 18px;
         }
         .header h1 {
@@ -37,12 +45,25 @@
             color: #000;
             letter-spacing: -0.5px;
         }
+        body.dark .header h1 {
+            color: #fff;
+        }
         .header p {
             color: #8e8e93;
             font-size: 15px;
             margin-top: 4px;
         }
-
+        .theme-toggle {
+            background: #e5e5ea;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        body.dark .theme-toggle {
+            background: #3a3a3c;
+        }
         .search-box {
             background: #ffffff;
             border-radius: 14px;
@@ -53,6 +74,9 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.04);
             margin-bottom: 16px;
         }
+        body.dark .search-box {
+            background: #2c2c2e;
+        }
         .search-box input {
             border: none;
             outline: none;
@@ -61,9 +85,11 @@
             flex: 1;
             background: transparent;
         }
+        body.dark .search-box input {
+            color: #fff;
+        }
         .search-box input::placeholder {
             color: #aeaeb2;
-            font-weight: 400;
         }
         .search-box button {
             background: #007aff;
@@ -74,19 +100,16 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.15s;
-            white-space: nowrap;
         }
         .search-box button:active {
             opacity: 0.7;
             transform: scale(0.96);
         }
-
         .filters {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         .filter-btn {
             background: #e5e5ea;
@@ -97,34 +120,56 @@
             font-weight: 500;
             color: #1c1c1e;
             cursor: pointer;
-            transition: 0.15s;
+        }
+        body.dark .filter-btn {
+            background: #3a3a3c;
+            color: #fff;
         }
         .filter-btn.active {
             background: #007aff;
             color: white;
         }
-        .filter-btn:active {
-            opacity: 0.6;
+        .filter-benefits {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
         }
-
+        .filter-benefits .filter-btn {
+            background: #e5e5ea;
+        }
+        body.dark .filter-benefits .filter-btn {
+            background: #3a3a3c;
+            color: #fff;
+        }
+        .filter-benefits .filter-btn.active {
+            background: #007aff;
+            color: white;
+        }
         .results {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-top: 4px;
         }
-
         .card {
             background: white;
             border-radius: 16px;
             padding: 16px 18px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            position: relative;
+        }
+        body.dark .card {
+            background: #2c2c2e;
         }
         .card h3 {
             font-size: 18px;
             font-weight: 700;
             color: #000;
             margin-bottom: 4px;
+        }
+        body.dark .card h3 {
+            color: #fff;
         }
         .card .level {
             font-size: 13px;
@@ -136,11 +181,18 @@
             border-radius: 30px;
             margin-bottom: 8px;
         }
+        body.dark .card .level {
+            background: #1c3a5c;
+            color: #6bb4ff;
+        }
         .card .uni {
             font-size: 15px;
             font-weight: 500;
             color: #1c1c1e;
             margin-bottom: 2px;
+        }
+        body.dark .card .uni {
+            color: #e5e5ea;
         }
         .card .directions {
             font-size: 14px;
@@ -155,6 +207,10 @@
             margin: 3px 4px 3px 0;
             font-size: 13px;
         }
+        body.dark .card .directions span {
+            background: #3a3a3c;
+            color: #ccc;
+        }
         .card .benefits {
             margin-top: 8px;
             display: flex;
@@ -168,17 +224,40 @@
             border-radius: 30px;
             display: inline-block;
         }
-        .benefit-bvi {
-            background: #34c759;
-            color: white;
+        .benefit-bvi { background: #34c759; color: white; }
+        .benefit-100 { background: #007aff; color: white; }
+        .benefit-extra { background: #ff9500; color: white; }
+
+        .card .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
         }
-        .benefit-100 {
-            background: #007aff;
-            color: white;
+        .card .stars {
+            color: #ff9500;
+            font-size: 14px;
         }
-        .benefit-extra {
-            background: #ff9500;
-            color: white;
+        .card .date {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+        body.dark .card .date {
+            color: #aeaeb2;
+        }
+        .card .fav-btn {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+        .card .fav-btn:active {
+            transform: scale(1.2);
         }
 
         .empty {
@@ -187,7 +266,6 @@
             padding: 40px 0;
             font-size: 16px;
         }
-
         .tabbar {
             margin-top: 28px;
             display: flex;
@@ -195,6 +273,9 @@
             background: #e5e5ea;
             border-radius: 30px;
             padding: 4px;
+        }
+        body.dark .tabbar {
+            background: #3a3a3c;
         }
         .tabbar button {
             flex: 1;
@@ -206,22 +287,27 @@
             font-weight: 600;
             color: #1c1c1e;
             cursor: pointer;
-            transition: 0.2s;
+        }
+        body.dark .tabbar button {
+            color: #e5e5ea;
         }
         .tabbar button.active {
             background: white;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        .tabbar button:active {
-            opacity: 0.6;
+        body.dark .tabbar button.active {
+            background: #2c2c2e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
-
         .prep-section {
             margin-top: 18px;
             background: white;
             border-radius: 16px;
             padding: 18px;
             display: none;
+        }
+        body.dark .prep-section {
+            background: #2c2c2e;
         }
         .prep-section.show {
             display: block;
@@ -238,11 +324,96 @@
             font-size: 15px;
             border-bottom: 1px solid #f2f2f7;
         }
+        body.dark .prep-section a {
+            border-bottom-color: #3a3a3c;
+        }
         .prep-section a:last-child {
             border-bottom: none;
         }
-        .prep-section a:active {
-            opacity: 0.6;
+
+        /* Чат-бот */
+        .chat-box {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 12px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        body.dark .chat-box {
+            background: #2c2c2e;
+        }
+        .chat-box.show {
+            display: flex;
+        }
+        .chat-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .chat-msg {
+            padding: 8px 14px;
+            border-radius: 20px;
+            max-width: 85%;
+            font-size: 15px;
+        }
+        .chat-msg.user {
+            background: #007aff;
+            color: white;
+            align-self: flex-end;
+        }
+        .chat-msg.bot {
+            background: #e5e5ea;
+            color: #000;
+            align-self: flex-start;
+        }
+        body.dark .chat-msg.bot {
+            background: #3a3a3c;
+            color: #fff;
+        }
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 30px;
+            border: 1px solid #e5e5ea;
+            outline: none;
+            font-size: 15px;
+        }
+        body.dark .chat-input input {
+            background: #3a3a3c;
+            border-color: #3a3a3c;
+            color: #fff;
+        }
+        .chat-input button {
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-export {
+            background: #34c759;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+        }
+        .btn-export:active {
+            opacity: 0.7;
         }
 
         .footnote {
@@ -251,14 +422,20 @@
             color: #aeaeb2;
             text-align: center;
         }
+        body.dark .footnote {
+            color: #636366;
+        }
     </style>
 </head>
 <body>
-<div class="app">
+<div class="app" id="app">
 
     <div class="header">
-        <h1>🎯 Олимп-гид</h1>
-        <p>Найди олимпиаду для вуза</p>
+        <div>
+            <h1>🎯 Олимп-гид</h1>
+            <p>Найди олимпиаду для вуза</p>
+        </div>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
     </div>
 
     <div class="search-box">
@@ -271,6 +448,25 @@
         <button class="filter-btn" data-subject="математика">📐 Математика</button>
         <button class="filter-btn" data-subject="физика">⚛ Физика</button>
         <button class="filter-btn" data-subject="информатика">💻 Информатика</button>
+        <button class="filter-btn" data-subject="биология">🧬 Биология</button>
+        <button class="filter-btn" data-subject="химия">🧪 Химия</button>
+        <button class="filter-btn" data-subject="история">📜 История</button>
+        <button class="filter-btn" data-subject="обществознание">📖 Обществознание</button>
+        <button class="filter-btn" data-subject="литература">📚 Литература</button>
+        <button class="filter-btn" data-subject="иностранный">🌍 Иностранный</button>
+        <button class="filter-btn" data-subject="право">⚖️ Право</button>
+        <button class="filter-btn" data-subject="экономика">💰 Экономика</button>
+    </div>
+
+    <div class="filter-benefits" id="benefitFilterContainer">
+        <button class="filter-btn active" data-benefit="all">Все льготы</button>
+        <button class="filter-btn" data-benefit="БВИ">✅ БВИ</button>
+        <button class="filter-btn" data-benefit="100 баллов">🔵 100 баллов</button>
+        <button class="filter-btn" data-benefit="доп. баллы">🟠 Доп. баллы</button>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <button id="exportBtn" class="btn-export">📥 Скачать список</button>
     </div>
 
     <div class="results" id="resultsContainer"></div>
@@ -278,10 +474,12 @@
     <div class="tabbar">
         <button class="active" data-tab="olymp">Олимпиады</button>
         <button data-tab="prep">📚 Подготовка</button>
+        <button data-tab="chat">🤖 Помощник</button>
+        <button data-tab="fav">⭐ Избранное</button>
     </div>
 
     <div class="prep-section" id="prepSection">
-        <h4>📹 Полезные материалы для подготовки</h4>
+        <h4>📹 Полезные материалы</h4>
         <div id="prepContent">
             <a href="https://olimpiada.ru/" target="_blank">Olimpiada.ru — главный портал олимпиад</a>
             <a href="https://rsr-olymp.ru/" target="_blank">РСОШ — официальный список перечневых олимпиад</a>
@@ -291,319 +489,171 @@
         </div>
     </div>
 
-    <div class="footnote">26 вузов, типы льгот: БВИ / 100 баллов / доп. баллы</div>
+    <div class="chat-box" id="chatBox">
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg bot">👋 Напиши вуз или предмет, я найду олимпиады!</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Например: МГУ или физика">
+            <button id="chatSend">Отправить</button>
+        </div>
+    </div>
+
+    <div class="footnote">40+ вузов, 12 предметов, БВИ / 100 баллов / доп. баллы</div>
 </div>
 
 <script>
+    // ============================================================
+    // БАЗА ДАННЫХ с датами и сложностью
+    // ============================================================
     const olympiads = [
-        // ===== МГУ =====
-        {
-            name: "Ломоносов",
-            level: "Перечневая I уровня",
-            university: "МГУ",
-            subjects: ["математика", "физика"],
-            directions: ["Мехмат", "ВМК", "Физфак"],
-            benefits: ["БВИ", "100 баллов"]
-        },
-        {
-            name: "Покори Воробьёвы горы",
-            level: "Перечневая I уровня",
-            university: "МГУ",
-            subjects: ["математика"],
-            directions: ["Мехмат", "ВМК"],
-            benefits: ["БВИ"]
-        },
-        // ===== МФТИ =====
-        {
-            name: "Физтех",
-            level: "Перечневая I уровня",
-            university: "МФТИ",
-            subjects: ["физика", "математика"],
-            directions: ["ФПМИ", "ФРКТ", "Физтех-школа физики"],
-            benefits: ["БВИ", "100 баллов"]
-        },
-        {
-            name: "Росатом",
-            level: "Перечневая I уровня",
-            university: "МФТИ, НИЯУ МИФИ, СПбГУ",
-            subjects: ["физика", "математика"],
-            directions: ["Физика", "Ядерная физика"],
-            benefits: ["БВИ", "100 баллов"]
-        },
-        // ===== НИУ ВШЭ =====
-        {
-            name: "Высшая проба",
-            level: "Перечневая I уровня",
-            university: "НИУ ВШЭ",
-            subjects: ["математика", "информатика", "экономика"],
-            directions: ["Экономика", "Математика", "ИТ"],
-            benefits: ["БВИ", "100 баллов"]
-        },
-        // ===== МГТУ им. Баумана =====
-        {
-            name: "Шаг в будущее",
-            level: "Перечневая II уровня",
-            university: "МГТУ им. Баумана",
-            subjects: ["математика", "физика"],
-            directions: ["Инженерия", "Робототехника"],
-            benefits: ["100 баллов", "доп. баллы"]
-        },
-        // ===== СПбГУ =====
-        {
-            name: "Ломоносов",
-            level: "Перечневая I уровня",
-            university: "СПбГУ",
-            subjects: ["математика", "физика"],
-            directions: ["Математика", "Физика"],
-            benefits: ["БВИ"]
-        },
-        // ===== НИЯУ МИФИ =====
-        {
-            name: "Росатом",
-            level: "Перечневая I уровня",
-            university: "НИЯУ МИФИ",
-            subjects: ["физика", "математика"],
-            directions: ["Ядерная физика", "Физика"],
-            benefits: ["БВИ"]
-        },
-        {
-            name: "Инженерная олимпиада НИЯУ МИФИ",
-            level: "Перечневая II уровня",
-            university: "НИЯУ МИФИ",
-            subjects: ["физика", "математика"],
-            directions: ["Инженерия", "Физика"],
-            benefits: ["100 баллов"]
-        },
-        // ===== УрФУ =====
-        {
-            name: "Уральский турнир юных физиков",
-            level: "Перечневая III уровня",
-            university: "УрФУ",
-            subjects: ["физика"],
-            directions: ["Физика", "Инженерия"],
-            benefits: ["доп. баллы"]
-        },
-        // ===== ТПУ =====
-        {
-            name: "Политехническая олимпиада ТПУ",
-            level: "Перечневая II уровня",
-            university: "ТПУ",
-            subjects: ["физика", "математика"],
-            directions: ["Инженерия", "Физика"],
-            benefits: ["100 баллов"]
-        },
-        // ===== ИТМО =====
-        {
-            name: "ИТМО-олимпиада по информатике",
-            level: "Перечневая I уровня",
-            university: "ИТМО",
-            subjects: ["информатика", "математика"],
-            directions: ["ИТ", "Робототехника", "Оптика"],
-            benefits: ["БВИ", "100 баллов"]
-        },
-        // ===== НГУ =====
-        {
-            name: "Всесибирская олимпиада",
-            level: "Перечневая I уровня",
-            university: "НГУ",
-            subjects: ["математика", "физика"],
-            directions: ["Математика", "Физика"],
-            benefits: ["БВИ"]
-        },
-        // ===== МАИ =====
-        {
-            name: "Космическая олимпиада МАИ",
-            level: "Перечневая II уровня",
-            university: "МАИ",
-            subjects: ["физика", "математика"],
-            directions: ["Авиация", "Космонавтика"],
-            benefits: ["100 баллов"]
-        },
-        // ===== МИСиС =====
-        {
-            name: "МИСиС-олимпиада по материаловедению",
-            level: "Перечневая II уровня",
-            university: "НИТУ МИСиС",
-            subjects: ["математика", "физика"],
-            directions: ["Материаловедение", "Металлургия", "ИТ"],
-            benefits: ["100 баллов"]
-        },
-        // ===== РУДН =====
-        {
-            name: "Олимпиада РУДН",
-            level: "Перечневая III уровня",
-            university: "РУДН",
-            subjects: ["математика"],
-            directions: ["Международные отношения", "Лингвистика"],
-            benefits: ["доп. баллы"]
-        },
-        // ===== СПбГУ ГА =====
-        {
-            name: "Олимпиада по физике для авиации",
-            level: "Перечневая III уровня",
-            university: "СПбГУ ГА",
-            subjects: ["физика", "математика"],
-            directions: ["Лётная эксплуатация", "Авиадиспетчеры", "Инженерия"],
-            benefits: ["100 баллов"]
-        },
-        // ===== УИ ГА =====
-        {
-            name: "Олимпиада УИ ГА по математике",
-            level: "Перечневая III уровня",
-            university: "УИ ГА",
-            subjects: ["математика"],
-            directions: ["Лётная эксплуатация", "Авиадиспетчеры"],
-            benefits: ["доп. баллы"]
-        },
-        // ===== КФУ =====
-        {
-            name: "Олимпиада КФУ по математике",
-            level: "Перечневая II уровня",
-            university: "КФУ",
-            subjects: ["математика", "физика"],
-            directions: ["Математика", "Физика", "ИТ"],
-            benefits: ["100 баллов"]
-        },
-        // ===== КГАУ =====
-        {
-            name: "Олимпиада КГАУ по физике",
-            level: "Перечневая III уровня",
-            university: "КГАУ",
-            subjects: ["физика"],
-            directions: ["Агроинженерия", "Экология"],
-            benefits: ["доп. баллы"]
-        },
-        // ===== КАИ =====
-        {
-            name: "Олимпиада КАИ по математике",
-            level: "Перечневая II уровня",
-            university: "КАИ",
-            subjects: ["математика", "физика"],
-            directions: ["Авиастроение", "Робототехника", "ИТ"],
-            benefits: ["100 баллов"]
-        },
-        // ===== СФУ =====
-        {
-            name: "Олимпиада СФУ по математике",
-            level: "Перечневая II уровня",
-            university: "СФУ",
-            subjects: ["математика", "физика"],
-            directions: ["Математика", "Физика", "Инженерия"],
-            benefits: ["100 баллов"]
-        },
-        // ===== ДВФУ =====
-        {
-            name: "Олимпиада ДВФУ по физике",
-            level: "Перечневая II уровня",
-            university: "ДВФУ",
-            subjects: ["физика", "математика"],
-            directions: ["Физика", "Инженерия", "Морская техника"],
-            benefits: ["100 баллов"]
-        },
-        // ===== ЮФУ =====
-        {
-            name: "Олимпиада ЮФУ по информатике",
-            level: "Перечневая II уровня",
-            university: "ЮФУ",
-            subjects: ["информатика", "математика"],
-            directions: ["ИТ", "Робототехника"],
-            benefits: ["100 баллов"]
-        },
-        // ===== БФУ =====
-        {
-            name: "Олимпиада БФУ по математике",
-            level: "Перечневая III уровня",
-            university: "БФУ им. Канта",
-            subjects: ["математика"],
-            directions: ["Математика", "Философия"],
-            benefits: ["доп. баллы"]
-        },
-        // ===== СевГУ =====
-        {
-            name: "Олимпиада СевГУ по физике",
-            level: "Перечневая III уровня",
-            university: "СевГУ",
-            subjects: ["физика"],
-            directions: ["Инженерия", "Морская техника"],
-            benefits: ["доп. баллы"]
-        },
-        // ===== ПГНИУ =====
-        {
-            name: "Олимпиада ПГНИУ по математике",
-            level: "Перечневая II уровня",
-            university: "ПГНИУ",
-            subjects: ["математика"],
-            directions: ["Математика", "Физика"],
-            benefits: ["100 баллов"]
-        },
-        // ===== ННГУ =====
-        {
-            name: "Олимпиада ННГУ по физике",
-            level: "Перечневая II уровня",
-            university: "ННГУ им. Лобачевского",
-            subjects: ["физика", "математика"],
-            directions: ["Физика", "Математика", "ИТ"],
-            benefits: ["100 баллов"]
-        },
-        // ===== ОмГУ =====
-        {
-            name: "Олимпиада ОмГУ по математике",
-            level: "Перечневая III уровня",
-            university: "ОмГУ",
-            subjects: ["математика"],
-            directions: ["Математика", "Физика"],
-            benefits: ["доп. баллы"]
-        },
-        // ===== Общие олимпиады =====
-        {
-            name: "ВсОШ (математика)",
-            level: "Всероссийская",
-            university: "МГУ, МФТИ, НИУ ВШЭ, СПбГУ, ИТМО, НГУ, КФУ, УрФУ, СФУ, ДВФУ, ЮФУ",
-            subjects: ["математика"],
-            directions: ["Математика", "Физика", "ИТ", "Экономика"],
-            benefits: ["БВИ", "100 баллов"]
-        },
-        {
-            name: "ВсОШ (физика)",
-            level: "Всероссийская",
-            university: "МФТИ, МГУ, НИЯУ МИФИ, ИТМО, НГУ, КФУ, СФУ, ДВФУ",
-            subjects: ["физика"],
-            directions: ["Физика", "Инженерия", "ИТ"],
-            benefits: ["БВИ", "100 баллов"]
-        },
-        {
-            name: "ВсОШ (информатика)",
-            level: "Всероссийская",
-            university: "НИУ ВШЭ, ИТМО, МФТИ, СПбГУ, КАИ, ЮФУ, ННГУ",
-            subjects: ["информатика"],
-            directions: ["ИТ", "Математика", "Робототехника"],
-            benefits: ["БВИ", "100 баллов"]
-        },
-        {
-            name: "ММО (Международная математическая)",
-            level: "Международная",
-            university: "МГУ, СПбГУ, МФТИ, НГУ",
-            subjects: ["математика"],
-            directions: ["Математика", "Мехмат", "Физтех-школы"],
-            benefits: ["БВИ"]
-        }
+        // МГУ
+        { name: "Ломоносов (математика)", level: "Перечневая I уровня", university: "МГУ", subjects: ["математика"], directions: ["Мехмат", "ВМК", "Физфак"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 3 },
+        { name: "Ломоносов (физика)", level: "Перечневая I уровня", university: "МГУ", subjects: ["физика"], directions: ["Физфак", "Мехмат", "ВМК"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 3 },
+        { name: "Ломоносов (биология)", level: "Перечневая I уровня", university: "МГУ", subjects: ["биология"], directions: ["Биофак", "Фундаментальная медицина"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 3 },
+        { name: "Ломоносов (химия)", level: "Перечневая I уровня", university: "МГУ", subjects: ["химия"], directions: ["Химфак", "Физфак"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 3 },
+        { name: "Ломоносов (история)", level: "Перечневая I уровня", university: "МГУ", subjects: ["история"], directions: ["Истфак", "Филфак"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Ломоносов (обществознание)", level: "Перечневая I уровня", university: "МГУ", subjects: ["обществознание", "экономика"], directions: ["Экономфак", "Социология", "Политология"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Ломоносов (литература)", level: "Перечневая I уровня", university: "МГУ", subjects: ["литература"], directions: ["Филфак", "Журфак"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Ломоносов (иностранный язык)", level: "Перечневая I уровня", university: "МГУ", subjects: ["иностранный"], directions: ["Филфак", "Иностранные языки"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Ломоносов (право)", level: "Перечневая I уровня", university: "МГУ", subjects: ["право", "обществознание"], directions: ["Юрфак"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Покори Воробьёвы горы (математика)", level: "Перечневая I уровня", university: "МГУ", subjects: ["математика"], directions: ["Мехмат", "ВМК", "Физфак"], benefits: ["БВИ"], date: "дек–фев", stars: 3 },
+        { name: "Покори Воробьёвы горы (физика)", level: "Перечневая I уровня", university: "МГУ", subjects: ["физика"], directions: ["Физфак", "Мехмат"], benefits: ["БВИ"], date: "дек–фев", stars: 3 },
+        { name: "Покори Воробьёвы горы (биология)", level: "Перечневая I уровня", university: "МГУ", subjects: ["биология"], directions: ["Биофак"], benefits: ["БВИ"], date: "дек–фев", stars: 3 },
+        { name: "Покори Воробьёвы горы (история)", level: "Перечневая I уровня", university: "МГУ", subjects: ["история"], directions: ["Истфак", "Филфак"], benefits: ["БВИ"], date: "дек–фев", stars: 2 },
+        { name: "Покори Воробьёвы горы (обществознание)", level: "Перечневая I уровня", university: "МГУ", subjects: ["обществознание"], directions: ["Экономфак", "Социология", "Политология"], benefits: ["БВИ"], date: "дек–фев", stars: 2 },
+        { name: "Покори Воробьёвы горы (литература)", level: "Перечневая I уровня", university: "МГУ", subjects: ["литература"], directions: ["Филфак", "Журфак"], benefits: ["БВИ"], date: "дек–фев", stars: 2 },
+        { name: "Покори Воробьёвы горы (иностранный язык)", level: "Перечневая I уровня", university: "МГУ", subjects: ["иностранный"], directions: ["Филфак", "Иностранные языки"], benefits: ["БВИ"], date: "дек–фев", stars: 2 },
+        { name: "Покори Воробьёвы горы (право)", level: "Перечневая I уровня", university: "МГУ", subjects: ["право"], directions: ["Юрфак"], benefits: ["БВИ"], date: "дек–фев", stars: 2 },
+        { name: "Росатом (физика)", level: "Перечневая I уровня", university: "МГУ, МФТИ, НИЯУ МИФИ, СПбГУ", subjects: ["физика", "математика"], directions: ["Физика", "Ядерная физика", "Инженерия"], benefits: ["БВИ", "100 баллов"], date: "фев–мар", stars: 3 },
+        // МФТИ
+        { name: "Физтех (физика)", level: "Перечневая I уровня", university: "МФТИ", subjects: ["физика", "математика"], directions: ["ФПМИ", "ФРКТ", "Физтех-школа физики"], benefits: ["БВИ", "100 баллов"], date: "дек–фев", stars: 3 },
+        { name: "Физтех (информатика)", level: "Перечневая I уровня", university: "МФТИ", subjects: ["информатика", "математика"], directions: ["ФПМИ", "ФРКТ", "Физтех-школа информатики"], benefits: ["БВИ", "100 баллов"], date: "дек–фев", stars: 3 },
+        // НИУ ВШЭ
+        { name: "Высшая проба (математика)", level: "Перечневая I уровня", university: "НИУ ВШЭ", subjects: ["математика"], directions: ["Математика", "ИТ", "Экономика"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 3 },
+        { name: "Высшая проба (информатика)", level: "Перечневая I уровня", university: "НИУ ВШЭ", subjects: ["информатика"], directions: ["ИТ", "Бизнес-информатика", "Прикладная математика"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 3 },
+        { name: "Высшая проба (история)", level: "Перечневая I уровня", university: "НИУ ВШЭ", subjects: ["история"], directions: ["История", "Филология", "Культурология"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Высшая проба (филология)", level: "Перечневая I уровня", university: "НИУ ВШЭ", subjects: ["литература", "иностранный"], directions: ["Филология", "Лингвистика", "Журналистика"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Высшая проба (право)", level: "Перечневая I уровня", university: "НИУ ВШЭ", subjects: ["право", "обществознание"], directions: ["Юриспруденция", "Правоохранительная деятельность"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Высшая проба (экономика)", level: "Перечневая I уровня", university: "НИУ ВШЭ", subjects: ["экономика", "обществознание"], directions: ["Экономика", "Бизнес-информатика", "Менеджмент"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        { name: "Высшая проба (дизайн)", level: "Перечневая I уровня", university: "НИУ ВШЭ", subjects: ["литература", "иностранный"], directions: ["Дизайн", "Медиакоммуникации", "Реклама"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 2 },
+        // СПбГУ
+        { name: "Ломоносов (математика)", level: "Перечневая I уровня", university: "СПбГУ", subjects: ["математика"], directions: ["Математика", "Физика", "Мехмат"], benefits: ["БВИ"], date: "ноя–янв", stars: 3 },
+        { name: "Ломоносов (физика)", level: "Перечневая I уровня", university: "СПбГУ", subjects: ["физика"], directions: ["Физика", "Мехмат"], benefits: ["БВИ"], date: "ноя–янв", stars: 3 },
+        { name: "Ломоносов (биология)", level: "Перечневая I уровня", university: "СПбГУ", subjects: ["биология"], directions: ["Биология", "Медицина", "Экология"], benefits: ["БВИ"], date: "ноя–янв", stars: 3 },
+        { name: "Ломоносов (химия)", level: "Перечневая I уровня", university: "СПбГУ", subjects: ["химия"], directions: ["Химия", "Физика", "Фармацевтика"], benefits: ["БВИ"], date: "ноя–янв", stars: 3 },
+        { name: "Ломоносов (история)", level: "Перечневая I уровня", university: "СПбГУ", subjects: ["история"], directions: ["История", "Филология", "Культурология"], benefits: ["БВИ"], date: "ноя–янв", stars: 2 },
+        { name: "Ломоносов (право)", level: "Перечневая I уровня", university: "СПбГУ", subjects: ["право", "обществознание"], directions: ["Юриспруденция", "Правоохранительная деятельность"], benefits: ["БВИ"], date: "ноя–янв", stars: 2 },
+        // НИЯУ МИФИ
+        { name: "Инженерная олимпиада НИЯУ МИФИ", level: "Перечневая II уровня", university: "НИЯУ МИФИ", subjects: ["физика", "математика"], directions: ["Инженерия", "Физика", "Ядерная физика"], benefits: ["100 баллов"], date: "фев–мар", stars: 2 },
+        // МГТУ им. Баумана
+        { name: "Шаг в будущее (математика)", level: "Перечневая II уровня", university: "МГТУ им. Баумана", subjects: ["математика", "физика"], directions: ["Инженерия", "Робототехника", "Машиностроение"], benefits: ["100 баллов", "доп. баллы"], date: "янв–мар", stars: 2 },
+        { name: "Шаг в будущее (информатика)", level: "Перечневая II уровня", university: "МГТУ им. Баумана", subjects: ["информатика"], directions: ["Инженерия", "Робототехника", "ИТ"], benefits: ["100 баллов", "доп. баллы"], date: "янв–мар", stars: 2 },
+        // УрФУ
+        { name: "Уральский турнир юных физиков", level: "Перечневая III уровня", university: "УрФУ", subjects: ["физика"], directions: ["Физика", "Инженерия", "Материаловедение"], benefits: ["доп. баллы"], date: "фев–апр", stars: 1 },
+        // ТПУ
+        { name: "Политехническая олимпиада ТПУ", level: "Перечневая II уровня", university: "ТПУ", subjects: ["физика", "математика"], directions: ["Инженерия", "Физика", "Энергетика"], benefits: ["100 баллов"], date: "фев–мар", stars: 2 },
+        // ИТМО
+        { name: "ИТМО-олимпиада (информатика)", level: "Перечневая I уровня", university: "ИТМО", subjects: ["информатика", "математика"], directions: ["ИТ", "Робототехника", "Оптика", "Программирование"], benefits: ["БВИ", "100 баллов"], date: "ноя–янв", stars: 3 },
+        // НГУ
+        { name: "Всесибирская олимпиада (математика)", level: "Перечневая I уровня", university: "НГУ", subjects: ["математика"], directions: ["Математика", "Физика", "Мехмат"], benefits: ["БВИ"], date: "окт–дек", stars: 3 },
+        { name: "Всесибирская олимпиада (физика)", level: "Перечневая I уровня", university: "НГУ", subjects: ["физика"], directions: ["Физика", "Инженерия"], benefits: ["БВИ"], date: "окт–дек", stars: 3 },
+        { name: "Всесибирская олимпиада (биология)", level: "Перечневая I уровня", university: "НГУ", subjects: ["биология"], directions: ["Биология", "Медицина", "Экология"], benefits: ["БВИ"], date: "окт–дек", stars: 3 },
+        // МАИ
+        { name: "Космическая олимпиада МАИ", level: "Перечневая II уровня", university: "МАИ", subjects: ["физика", "математика"], directions: ["Авиация", "Космонавтика", "Инженерия"], benefits: ["100 баллов"], date: "янв–мар", stars: 2 },
+        // МИСиС
+        { name: "МИСиС-олимпиада (физика)", level: "Перечневая II уровня", university: "НИТУ МИСиС", subjects: ["физика", "математика"], directions: ["Материаловедение", "Металлургия", "ИТ"], benefits: ["100 баллов"], date: "фев–мар", stars: 2 },
+        // РУДН
+        { name: "Олимпиада РУДН (иностранный язык)", level: "Перечневая III уровня", university: "РУДН", subjects: ["иностранный", "литература"], directions: ["Лингвистика", "Филология", "Международные отношения"], benefits: ["доп. баллы"], date: "мар–апр", stars: 1 },
+        // КФУ
+        { name: "Олимпиада КФУ (математика)", level: "Перечневая II уровня", university: "КФУ", subjects: ["математика", "физика"], directions: ["Математика", "Физика", "ИТ"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        { name: "Олимпиада КФУ (биология)", level: "Перечневая II уровня", university: "КФУ", subjects: ["биология"], directions: ["Биология", "Медицина", "Экология"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        { name: "Олимпиада КФУ (химия)", level: "Перечневая II уровня", university: "КФУ", subjects: ["химия"], directions: ["Химия", "Фармацевтика", "Материаловедение"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // КАИ
+        { name: "Олимпиада КАИ (математика)", level: "Перечневая II уровня", university: "КАИ", subjects: ["математика", "физика"], directions: ["Авиастроение", "Робототехника", "ИТ"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // СФУ
+        { name: "Олимпиада СФУ (математика)", level: "Перечневая II уровня", university: "СФУ", subjects: ["математика", "физика"], directions: ["Математика", "Физика", "Инженерия"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        { name: "Олимпиада СФУ (биология)", level: "Перечневая II уровня", university: "СФУ", subjects: ["биология", "химия"], directions: ["Биология", "Экология", "Медицина"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // ДВФУ
+        { name: "Олимпиада ДВФУ (физика)", level: "Перечневая II уровня", university: "ДВФУ", subjects: ["физика", "математика"], directions: ["Физика", "Инженерия", "Морская техника"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        { name: "Олимпиада ДВФУ (биология)", level: "Перечневая II уровня", university: "ДВФУ", subjects: ["биология", "химия"], directions: ["Биология", "Медицина", "Экология"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // ЮФУ
+        { name: "Олимпиада ЮФУ (информатика)", level: "Перечневая II уровня", university: "ЮФУ", subjects: ["информатика", "математика"], directions: ["ИТ", "Робототехника", "Программирование"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        { name: "Олимпиада ЮФУ (биология)", level: "Перечневая II уровня", university: "ЮФУ", subjects: ["биология"], directions: ["Биология", "Экология", "Медицина"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // МИРЭА
+        { name: "Олимпиада МИРЭА (информатика)", level: "Перечневая II уровня", university: "МИРЭА", subjects: ["информатика", "математика"], directions: ["Информатика", "Программирование", "Приборостроение"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // МЭИ
+        { name: "Олимпиада МЭИ (энергетика)", level: "Перечневая II уровня", university: "МЭИ", subjects: ["физика", "математика"], directions: ["Энергетика", "Физика", "Инженерия"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // РЭУ им. Плеханова
+        { name: "Олимпиада РЭУ (экономика)", level: "Перечневая II уровня", university: "РЭУ им. Плеханова", subjects: ["экономика", "обществознание"], directions: ["Экономика", "Менеджмент", "Бизнес-информатика"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // Финансовый университет
+        { name: "Олимпиада Финансового университета", level: "Перечневая II уровня", university: "Финансовый университет", subjects: ["экономика", "обществознание", "право"], directions: ["Экономика", "Финансы", "Право"], benefits: ["100 баллов"], date: "дек–фев", stars: 2 },
+        // ОБЩИЕ
+        { name: "ВсОШ (математика)", level: "Всероссийская", university: "МГУ, МФТИ, НИУ ВШЭ, СПбГУ, ИТМО, НГУ, КФУ, УрФУ, СФУ, ДВФУ, ЮФУ, МИРЭА", subjects: ["математика"], directions: ["Математика", "Физика", "ИТ", "Экономика"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 3 },
+        { name: "ВсОШ (физика)", level: "Всероссийская", university: "МФТИ, МГУ, НИЯУ МИФИ, ИТМО, НГУ, КФУ, СФУ, ДВФУ, МЭИ", subjects: ["физика"], directions: ["Физика", "Инженерия", "ИТ", "Энергетика"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 3 },
+        { name: "ВсОШ (информатика)", level: "Всероссийская", university: "НИУ ВШЭ, ИТМО, МФТИ, СПбГУ, КАИ, ЮФУ, ННГУ, МИРЭА", subjects: ["информатика"], directions: ["ИТ", "Математика", "Робототехника", "Программирование"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 3 },
+        { name: "ВсОШ (биология)", level: "Всероссийская", university: "МГУ, СПбГУ, НГУ, КФУ, СФУ, ДВФУ, ЮФУ, КубГУ, Иркутский ГУ", subjects: ["биология"], directions: ["Биология", "Медицина", "Экология"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 3 },
+        { name: "ВсОШ (химия)", level: "Всероссийская", university: "МГУ, СПбГУ, КФУ, НГУ, АлтГУ, КубГУ", subjects: ["химия"], directions: ["Химия", "Фармацевтика", "Материаловедение"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 3 },
+        { name: "ВсОШ (история)", level: "Всероссийская", university: "МГУ, СПбГУ, НИУ ВШЭ, КФУ, СФУ, ДВФУ, ЮФУ, РГГУ, ТюмГУ", subjects: ["история"], directions: ["История", "Филология", "Культурология"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 2 },
+        { name: "ВсОШ (обществознание)", level: "Всероссийская", university: "МГУ, НИУ ВШЭ, СПбГУ, РУДН, КФУ, Финансовый университет", subjects: ["обществознание", "экономика"], directions: ["Экономика", "Социология", "Политология", "Право"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 2 },
+        { name: "ВсОШ (литература)", level: "Всероссийская", university: "МГУ, СПбГУ, НИУ ВШЭ, КФУ, СФУ, РГГУ, МГПУ", subjects: ["литература"], directions: ["Филология", "Журналистика", "Культурология"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 2 },
+        { name: "ВсОШ (иностранный язык)", level: "Всероссийская", university: "МГУ, НИУ ВШЭ, СПбГУ, РУДН, МГПУ", subjects: ["иностранный"], directions: ["Лингвистика", "Филология", "Международные отношения"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 2 },
+        { name: "ВсОШ (право)", level: "Всероссийская", university: "МГУ, НИУ ВШЭ, СПбГУ, РУДН, Финансовый университет", subjects: ["право"], directions: ["Юриспруденция", "Правоохранительная деятельность"], benefits: ["БВИ", "100 баллов"], date: "сен–апр", stars: 2 },
+        { name: "ММО (Международная математическая)", level: "Международная", university: "МГУ, СПбГУ, МФТИ, НГУ", subjects: ["математика"], directions: ["Математика", "Мехмат", "Физтех-школы"], benefits: ["БВИ"], date: "июл", stars: 3 }
     ];
 
+    // ============================================================
+    // СОСТОЯНИЕ
+    // ============================================================
+    let currentFilter = 'all';
+    let currentBenefit = 'all';
+    let currentTab = 'olymp';
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+    // ============================================================
+    // DOM
+    // ============================================================
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
     const resultsContainer = document.getElementById('resultsContainer');
-    const filterBtns = document.querySelectorAll('.filter-btn');
+    const filterBtns = document.querySelectorAll('#filterContainer .filter-btn');
+    const benefitBtns = document.querySelectorAll('#benefitFilterContainer .filter-btn');
     const tabButtons = document.querySelectorAll('.tabbar button');
     const prepSection = document.getElementById('prepSection');
+    const chatBox = document.getElementById('chatBox');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const chatSend = document.getElementById('chatSend');
+    const themeToggle = document.getElementById('themeToggle');
+    const exportBtn = document.getElementById('exportBtn');
 
-    let currentFilter = 'all';
+    // ============================================================
+    // ТЁМНАЯ ТЕМА
+    // ============================================================
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+        themeToggle.textContent = '☀️';
+    }
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        const isDark = document.body.classList.contains('dark');
+        themeToggle.textContent = isDark ? '☀️' : '🌙';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
 
-    function renderResults(filterSubject = 'all', query = '') {
+    // ============================================================
+    // РЕНДЕР
+    // ============================================================
+    function renderResults(filterSubject = 'all', query = '', benefit = 'all') {
         const q = query.toLowerCase().trim();
         let filtered = olympiads.filter(ol => {
             const uniMatch = ol.university.toLowerCase().includes(q) || q === '';
             const subjectMatch = filterSubject === 'all' || ol.subjects.includes(filterSubject);
-            return uniMatch && subjectMatch;
+            let benefitMatch = true;
+            if (benefit === 'БВИ') benefitMatch = ol.benefits.includes('БВИ');
+            else if (benefit === '100 баллов') benefitMatch = ol.benefits.includes('100 баллов');
+            else if (benefit === 'доп. баллы') benefitMatch = ol.benefits.includes('доп. баллы');
+            return uniMatch && subjectMatch && benefitMatch;
         });
 
         if (filtered.length === 0) {
@@ -612,7 +662,7 @@
         }
 
         let html = '';
-        filtered.forEach(ol => {
+        filtered.forEach((ol, index) => {
             const dirs = ol.directions.map(d => `<span>${d}</span>`).join(' ');
             let benefitsHtml = '';
             if (ol.benefits && ol.benefits.length > 0) {
@@ -624,23 +674,106 @@
                     benefitsHtml += `<span class="benefit-tag ${cls}">${b}</span>`;
                 });
             }
-
+            const stars = '⭐'.repeat(ol.stars || 1) + '☆'.repeat(3 - (ol.stars || 1));
+            const isFav = favorites.includes(ol.name + ol.university);
+            const id = ol.name + ol.university;
             html += `
                 <div class="card">
+                    <button class="fav-btn" data-id="${id}">${isFav ? '❤️' : '🤍'}</button>
                     <h3>${ol.name}</h3>
                     <div class="level">${ol.level}</div>
                     <div class="uni">🏛 ${ol.university}</div>
                     <div class="directions">Направления: ${dirs}</div>
                     ${benefitsHtml ? `<div class="benefits">${benefitsHtml}</div>` : ''}
+                    <div class="meta">
+                        <span class="stars">${stars}</span>
+                        <span class="date">📅 ${ol.date || '—'}</span>
+                    </div>
                 </div>
             `;
         });
         resultsContainer.innerHTML = html;
+
+        // вешаем обработчики на кнопки избранного
+        document.querySelectorAll('.fav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = btn.dataset.id;
+                const idx = favorites.indexOf(id);
+                if (idx > -1) {
+                    favorites.splice(idx, 1);
+                } else {
+                    favorites.push(id);
+                }
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                renderResults(currentFilter, searchInput.value, currentBenefit);
+                if (currentTab === 'fav') renderFavorites();
+            });
+        });
     }
 
+    // ============================================================
+    // ИЗБРАННОЕ
+    // ============================================================
+    function renderFavorites() {
+        const favOlympiads = olympiads.filter(ol => favorites.includes(ol.name + ol.university));
+        if (favOlympiads.length === 0) {
+            resultsContainer.innerHTML = `<div class="empty">⭐ Нет избранных олимпиад<br><span style="font-size:14px;">Нажми ❤️ на карточке, чтобы добавить</span></div>`;
+            return;
+        }
+        let html = '';
+        favOlympiads.forEach(ol => {
+            const dirs = ol.directions.map(d => `<span>${d}</span>`).join(' ');
+            let benefitsHtml = '';
+            if (ol.benefits) {
+                ol.benefits.forEach(b => {
+                    let cls = '';
+                    if (b === 'БВИ') cls = 'benefit-bvi';
+                    else if (b === '100 баллов') cls = 'benefit-100';
+                    else if (b === 'доп. баллы') cls = 'benefit-extra';
+                    benefitsHtml += `<span class="benefit-tag ${cls}">${b}</span>`;
+                });
+            }
+            const stars = '⭐'.repeat(ol.stars || 1) + '☆'.repeat(3 - (ol.stars || 1));
+            html += `
+                <div class="card">
+                    <button class="fav-btn" data-id="${ol.name + ol.university}">❤️</button>
+                    <h3>${ol.name}</h3>
+                    <div class="level">${ol.level}</div>
+                    <div class="uni">🏛 ${ol.university}</div>
+                    <div class="directions">Направления: ${dirs}</div>
+                    ${benefitsHtml ? `<div class="benefits">${benefitsHtml}</div>` : ''}
+                    <div class="meta">
+                        <span class="stars">${stars}</span>
+                        <span class="date">📅 ${ol.date || '—'}</span>
+                    </div>
+                </div>
+            `;
+        });
+        resultsContainer.innerHTML = html;
+        document.querySelectorAll('.fav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                const idx = favorites.indexOf(id);
+                if (idx > -1) {
+                    favorites.splice(idx, 1);
+                }
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                renderFavorites();
+                if (currentTab === 'olymp') renderResults(currentFilter, searchInput.value, currentBenefit);
+            });
+        });
+    }
+
+    // ============================================================
+    // ПОИСК
+    // ============================================================
     function handleSearch() {
         const query = searchInput.value;
-        renderResults(currentFilter, query);
+        if (currentTab === 'fav') {
+            renderFavorites();
+        } else {
+            renderResults(currentFilter, query, currentBenefit);
+        }
     }
 
     searchBtn.addEventListener('click', handleSearch);
@@ -648,28 +781,119 @@
         if (e.key === 'Enter') handleSearch();
     });
 
+    // ============================================================
+    // ФИЛЬТРЫ ПРЕДМЕТОВ
+    // ============================================================
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentFilter = btn.dataset.subject;
-            handleSearch();
+            if (currentTab === 'fav') renderFavorites();
+            else handleSearch();
         });
     });
 
+    // ============================================================
+    // ФИЛЬТРЫ ЛЬГОТ
+    // ============================================================
+    benefitBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            benefitBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentBenefit = btn.dataset.benefit;
+            if (currentTab === 'fav') renderFavorites();
+            else handleSearch();
+        });
+    });
+
+    // ============================================================
+    // ТАБЫ
+    // ============================================================
     tabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             tabButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            if (btn.dataset.tab === 'prep') {
+            currentTab = btn.dataset.tab;
+
+            prepSection.classList.remove('show');
+            chatBox.classList.remove('show');
+
+            if (currentTab === 'prep') {
                 prepSection.classList.add('show');
+                resultsContainer.innerHTML = '';
+            } else if (currentTab === 'chat') {
+                chatBox.classList.add('show');
+                resultsContainer.innerHTML = '';
+            } else if (currentTab === 'fav') {
+                renderFavorites();
             } else {
-                prepSection.classList.remove('show');
+                handleSearch();
             }
         });
     });
 
-    renderResults('all', '');
+    // ============================================================
+    // ЧАТ-БОТ
+    // ============================================================
+    function botReply(text) {
+        const q = text.toLowerCase().trim();
+        let found = olympiads.filter(ol =>
+            ol.university.toLowerCase().includes(q) ||
+            ol.subjects.some(s => s.includes(q))
+        );
+        let msg = '';
+        if (found.length === 0) {
+            msg = '😕 Не нашёл олимпиад по твоему запросу. Попробуй другой вуз или предмет.';
+        } else {
+            const names = found.slice(0, 5).map(o => `- ${o.name} (${o.university})`).join('\n');
+            msg = `🔍 Нашёл ${found.length} олимпиад(ы):\n${names}`;
+        }
+        const div = document.createElement('div');
+        div.className = 'chat-msg bot';
+        div.textContent = msg;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    chatSend.addEventListener('click', () => {
+        const text = chatInput.value.trim();
+        if (!text) return;
+        const userDiv = document.createElement('div');
+        userDiv.className = 'chat-msg user';
+        userDiv.textContent = text;
+        chatMessages.appendChild(userDiv);
+        chatInput.value = '';
+        setTimeout(() => botReply(text), 300);
+    });
+    chatInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') chatSend.click();
+    });
+
+    // ============================================================
+    // ЭКСПОРТ
+    // ============================================================
+    exportBtn.addEventListener('click', () => {
+        const cards = document.querySelectorAll('.card');
+        let text = '🎯 Олимп-гид — список олимпиад\n\n';
+        cards.forEach(card => {
+            const name = card.querySelector('h3')?.textContent || '';
+            const uni = card.querySelector('.uni')?.textContent || '';
+            const level = card.querySelector('.level')?.textContent || '';
+            const dirs = card.querySelector('.directions')?.textContent || '';
+            text += `${name}\n${level} | ${uni}\n${dirs}\n\n`;
+        });
+        const blob = new Blob([text], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'olympiad_list.txt';
+        a.click();
+    });
+
+    // ============================================================
+    // СТАРТ
+    // ============================================================
+    renderResults('all', '', 'all');
 </script>
 </body>
 </html>
